@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import Card from './style'
+import { Card, Shading } from './style'
 import swords from '../../assets/swords.png'
 import heart from '../../assets/heart.png'
 import shield from '../../assets/shield.png'
@@ -28,7 +28,7 @@ function PokeCard({ url }) {
             })
         })
         infoPromise.catch((error) => console.log(error.response))
-    }, [])
+    }, [url])
 
     const CustomTooltip = styled(({ className, ...props }) => (
         <Tooltip {...props} classes={{ popper: className }} />
@@ -48,14 +48,16 @@ function PokeCard({ url }) {
         <Card>
             {info ? (
                 <article>
-                    <h1>{info.name.toUpperCase()}</h1>
-                    <img
-                        src={
-                            info.sprites.other.home.front_default ||
-                            info.sprites.front_default
-                        }
-                        alt={info.name}
-                    />
+                    <section>
+                        <h1>{info.name.toUpperCase()}</h1>
+                        <img
+                            src={
+                                info.sprites.other['official-artwork']
+                                    .front_default || info.sprites.front_default
+                            }
+                            alt={info.name}
+                        />
+                    </section>
 
                     <section className="description">{description}</section>
 
@@ -64,21 +66,25 @@ function PokeCard({ url }) {
                             <div className="hp">
                                 <img src={heart} alt="hp" />
                                 <span>{hp.base_stat}</span>
-                                <div></div>
+                                <Shading size={hp.base_stat < 100 ? 30 : 50} />
                             </div>
                         </CustomTooltip>
                         <CustomTooltip title="attack">
                             <div className="attack">
                                 <img src={swords} alt="attack" />
                                 <span>{attack.base_stat}</span>
-                                <div></div>
+                                <Shading
+                                    size={attack.base_stat < 100 ? 30 : 50}
+                                />
                             </div>
                         </CustomTooltip>
                         <CustomTooltip title="defense">
                             <div className="defense">
                                 <img src={shield} alt="defense" />
                                 <span>{defense.base_stat}</span>
-                                <div></div>
+                                <Shading
+                                    size={defense.base_stat < 100 ? 30 : 50}
+                                />
                             </div>
                         </CustomTooltip>
                     </section>
