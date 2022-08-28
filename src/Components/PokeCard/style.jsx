@@ -1,12 +1,10 @@
 import styled from 'styled-components'
 
-const Card = styled.li`
-    width: 25%;
+const Card = styled.div`
     background-color: #2c2c2c;
     color: #fff;
     padding: 10px;
     border-radius: 10px;
-    cursor: pointer;
 
     article {
         height: 100%;

@@ -6,10 +6,13 @@ import heart from '../../assets/heart.png'
 import shield from '../../assets/shield.png'
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip'
 import { styled } from '@mui/material/styles'
+import { useNavigate } from 'react-router-dom'
 
 function PokeCard({ url }) {
     const [info, setInfo] = useState(null)
     const [description, setDescription] = useState('')
+
+    const navigate = useNavigate()
 
     useEffect(() => {
         const infoPromise = axios.get(url)

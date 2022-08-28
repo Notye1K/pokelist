@@ -1,23 +1,37 @@
 import axios from 'axios'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import PokeCard from '../PokeCard'
 import Container from './style'
+import baseUrl from '../../utils/baseUrl'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 function MainPage() {
-    const baseUrl = 'https://pokeapi.co/api/v2/pokemon/'
-    const [url, setUrl] = useState(baseUrl)
+    function useQuery() {
+        const { search } = useLocation()
+        return useMemo(() => new URLSearchParams(search), [search])
+    }
+
+    const query = useQuery()
+    const pag = query.get('pag')
+    console.log(pag)
+    const [url, setUrl] = useState(
+        pag ? baseUrl + `?offset=${parseInt(pag) * 20}&limit=20` : baseUrl
+    )
     const [response, setResponse] = useState()
 
     useEffect(() => {
         const promise = axios.get(url)
         promise.then((response) => setResponse(response.data))
-    }, [url])
+    }, [url, query])
 
     let pagination = 0
     if (response) {
         pagination = Math.ceil(response.count / 20)
     }
 
+    const navigate = useNavigate()
+
+    console.log(url)
     return (
         <Container>
             <header>
@@ -44,9 +58,13 @@ function MainPage() {
                 {[...Array(pagination)].map((el, index) => (
                     <button
                         key={index}
-                        onClick={() =>
-                            setUrl(baseUrl + `?offset=${index * 20}&limit=20`)
-                        }
+                        onClick={() => {
+                            navigate('/?pag=' + index)
+                            setUrl(
+                                baseUrl +
+                                    `?offset=${parseInt(index) * 20}&limit=20`
+                            )
+                        }}
                     >
                         {index}
                     </button>
@@ -55,7 +73,12 @@ function MainPage() {
             <ul>
                 {response
                     ? response.results.map((poke) => (
-                          <PokeCard key={poke.name} url={poke.url} />
+                          <li
+                              key={poke.name}
+                              onClick={() => navigate(`/${poke.name}`)}
+                          >
+                              <PokeCard url={poke.url} />
+                          </li>
                       ))
                     : 'haha'}
             </ul>

@@ -13,6 +13,11 @@ const Container = styled.main`
         gap: 1em;
         justify-content: center;
     }
+
+    li {
+        cursor: pointer;
+        width: 25%;
+    }
 `
 
 export default Container
