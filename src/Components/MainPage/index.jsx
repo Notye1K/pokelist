@@ -16,7 +16,7 @@ function MainPage() {
     }
 
     const query = useQuery()
-    const pag = query.get('pag')
+    const pag = query.get('pag') || 1
     const [url, setUrl] = useState(
         pag ? baseUrl + `?offset=${(parseInt(pag) - 1) * 20}&limit=20` : baseUrl
     )

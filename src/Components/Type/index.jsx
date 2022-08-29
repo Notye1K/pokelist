@@ -1,4 +1,5 @@
 import Container from './style'
+import capitalize from '../../utils/capitalize'
 
 function Type({ type }) {
     let typeBack
@@ -82,9 +83,10 @@ function Type({ type }) {
             typeColor = 'black'
             break
     }
+
     return (
         <Container typeBack={typeBack} typeColor={typeColor}>
-            {type}
+            {capitalize(type)}
         </Container>
     )
 }

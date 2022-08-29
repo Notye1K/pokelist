@@ -22,6 +22,9 @@ const Container = styled.main`
             position: absolute;
             top: 10px;
             left: 10px;
+            @media (max-width: 600px) {
+                display: none;
+            }
         }
 
         button {

@@ -6,6 +6,7 @@ import heart from '../../assets/heart.png'
 import shield from '../../assets/shield.png'
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip'
 import { styled } from '@mui/material/styles'
+import capitalize from '../../utils/capitalize'
 
 function PokeCard({ url }) {
     const [info, setInfo] = useState(null)
@@ -50,7 +51,7 @@ function PokeCard({ url }) {
             {info ? (
                 <article>
                     <section>
-                        <h1>{info.name}</h1>
+                        <h1>{capitalize(info.name)}</h1>
                         <img
                             src={
                                 info.sprites.other['official-artwork']

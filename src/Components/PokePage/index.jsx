@@ -3,8 +3,12 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import baseUrl from '../../utils/baseUrl'
 import PokeCard from '../PokeCard'
+import SearchBar from '../SearchBar'
 import Type from '../Type'
 import Container from './style'
+import pokelogo from '../../assets/pokelogo.png'
+import HomeIcon from '@mui/icons-material/Home'
+import { IconButton, TextField, Tooltip } from '@mui/material'
 
 function PokePage() {
     const { pokemon } = useParams()
@@ -16,20 +20,59 @@ function PokePage() {
     useEffect(() => {
         const promise = axios.get(url)
         promise.then((response) => setInfo(response.data))
-    }, [])
+    }, [pokemon])
 
     return (
         <Container>
+            <header>
+                <img
+                    onClick={() => navigate(`/`)}
+                    src={pokelogo}
+                    alt="pokemon"
+                />
+                {info && (
+                    <div className="search">
+                        {info.id === 1 || (
+                            <button onClick={() => navigate(`/${info.id - 1}`)}>
+                                Previous
+                            </button>
+                        )}
+                        <SearchBar />
+
+                        {info.id === 10249 || (
+                            <button onClick={() => navigate(`/${info.id + 1}`)}>
+                                Next
+                            </button>
+                        )}
+                    </div>
+                )}
+
+                <Tooltip title="Home">
+                    <IconButton
+                        sx={{
+                            '&:hover': { background: '#fff' },
+                            background: '#fff',
+                        }}
+                        aria-label="home"
+                        size="small"
+                        onClick={() => navigate(`/`)}
+                    >
+                        <HomeIcon fontSize="inherit" />
+                    </IconButton>
+                </Tooltip>
+            </header>
             {info ? (
                 <>
-                    <button onClick={() => navigate(-1)}>voltar</button>
                     <section className="card">
                         <PokeCard url={url} />
                     </section>
 
                     <section className="body">
-                        <p>height = {info.height}</p>
-                        <p>weight = {info.weight}</p>
+                        <h1>Body</h1>
+                        <div>
+                            <p>Height: {info.height / 10} m</p>
+                            <p>Weight: {info.weight / 10} kg</p>
+                        </div>
                     </section>
 
                     <section className="types">
@@ -39,16 +82,47 @@ function PokePage() {
                                 <Type
                                     type={type.type.name}
                                     key={type.type.name}
-                                >
-                                    {type.type.name}
-                                </Type>
+                                />
                             ))}
                         </div>
                     </section>
 
-                    <section>
+                    <section className="comments-area">
                         <h1>Comments</h1>
-                        <div></div>
+                        <div className="user-comment">
+                            <h2>Nome user</h2>
+                            <textarea name="userComment" rows="5"></textarea>
+                            <button>enviar</button>
+                        </div>
+                        <div className="comments">
+                            <div className="comment">
+                                <h2>Nome da sisaf</h2>
+                                <p>
+                                    Lorem ipsum dolor sit amet consectetur
+                                    adipisicing elit. Ullam praesentium
+                                    veritatis id odit vel voluptatum a quibusdam
+                                    maiores dicta atque.
+                                </p>
+                            </div>
+                            <div className="comment">
+                                <h2>Nome da sisaf</h2>
+                                <p>
+                                    Lorem ipsum dolor sit amet consectetur
+                                    adipisicing elit. Ullam praesentium
+                                    veritatis id odit vel voluptatum a quibusdam
+                                    maiores dicta atque.
+                                </p>
+                            </div>
+                            <div className="comment">
+                                <h2>Nome da sisaf</h2>
+                                <p>
+                                    Lorem ipsum dolor sit amet consectetur
+                                    adipisicing elit. Ullam praesentium
+                                    veritatis id odit vel voluptatum a quibusdam
+                                    maiores dicta atque.
+                                </p>
+                            </div>
+                        </div>
                     </section>
                 </>
             ) : (
