@@ -4,6 +4,10 @@ import PokeCard from '../PokeCard'
 import Container from './style'
 import baseUrl from '../../utils/baseUrl'
 import { useLocation, useNavigate } from 'react-router-dom'
+import SearchBar from '../SearchBar'
+import ChevronRightIcon from '@mui/icons-material/ChevronRight'
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
+import pokelogo from '../../assets/pokelogo.png'
 
 function MainPage() {
     function useQuery() {
@@ -13,9 +17,8 @@ function MainPage() {
 
     const query = useQuery()
     const pag = query.get('pag')
-    console.log(pag)
     const [url, setUrl] = useState(
-        pag ? baseUrl + `?offset=${parseInt(pag) * 20}&limit=20` : baseUrl
+        pag ? baseUrl + `?offset=${(parseInt(pag) - 1) * 20}&limit=20` : baseUrl
     )
     const [response, setResponse] = useState()
 
@@ -24,6 +27,10 @@ function MainPage() {
         promise.then((response) => setResponse(response.data))
     }, [url, query])
 
+    if (pag) {
+        document.getElementById(`pag${pag}`)?.focus()
+    }
+
     let pagination = 0
     if (response) {
         pagination = Math.ceil(response.count / 20)
@@ -31,44 +38,80 @@ function MainPage() {
 
     const navigate = useNavigate()
 
-    console.log(url)
+    function sliderRight() {
+        const slider = document.getElementById('slider')
+        slider.scrollLeft = slider.scrollLeft + 100
+    }
+    function sliderLeft() {
+        const slider = document.getElementById('slider')
+        slider.scrollLeft = slider.scrollLeft - 100
+    }
+
     return (
         <Container>
             <header>
+                <img src={pokelogo} alt="pokemon" />
                 {response ? (
-                    <>
-                        <button
-                            onClick={() => {
-                                setUrl(response.previous)
-                            }}
-                        >
-                            volt
-                        </button>
-                        <button
-                            onClick={() => {
-                                setUrl(response.next)
-                            }}
-                        >
-                            prox
-                        </button>
-                    </>
+                    <div className="search">
+                        {response.previous !== null && (
+                            <button
+                                onClick={() => {
+                                    setUrl(response.previous)
+                                    navigate('/?pag=' + (parseInt(pag) - 1))
+                                }}
+                            >
+                                Previous
+                            </button>
+                        )}
+                        <SearchBar />
+                        {response.next !== null && (
+                            <button
+                                onClick={() => {
+                                    setUrl(response.next)
+                                    navigate('/?pag=' + (parseInt(pag) + 1))
+                                }}
+                            >
+                                Next
+                            </button>
+                        )}
+                    </div>
                 ) : (
                     'asdf'
                 )}
-                {[...Array(pagination)].map((el, index) => (
-                    <button
-                        key={index}
-                        onClick={() => {
-                            navigate('/?pag=' + index)
-                            setUrl(
-                                baseUrl +
-                                    `?offset=${parseInt(index) * 20}&limit=20`
-                            )
-                        }}
-                    >
-                        {index}
-                    </button>
-                ))}
+                <div className="pages">
+                    <ChevronLeftIcon onClick={sliderLeft} />
+                    <div id="slider">
+                        {[...Array(pagination)].map((el, index) => (
+                            <button
+                                key={index}
+                                id={`pag${index + 1}`}
+                                onClick={() => {
+                                    navigate('/?pag=' + (index + 1))
+                                    setUrl(
+                                        baseUrl +
+                                            `?offset=${
+                                                parseInt(index) * 20
+                                            }&limit=20`
+                                    )
+                                }}
+                                style={
+                                    pag == index + 1
+                                        ? {
+                                              background: '#424242',
+                                              color: 'white',
+                                          }
+                                        : {}
+                                }
+                            >
+                                {index + 1}
+                            </button>
+                        ))}
+                    </div>
+                    <ChevronRightIcon
+                        sx={{ cursor: 'pointer' }}
+                        onClick={sliderRight}
+                    />
+                </div>
             </header>
             <ul>
                 {response

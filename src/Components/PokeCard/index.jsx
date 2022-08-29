@@ -6,13 +6,10 @@ import heart from '../../assets/heart.png'
 import shield from '../../assets/shield.png'
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip'
 import { styled } from '@mui/material/styles'
-import { useNavigate } from 'react-router-dom'
 
 function PokeCard({ url }) {
     const [info, setInfo] = useState(null)
     const [description, setDescription] = useState('')
-
-    const navigate = useNavigate()
 
     useEffect(() => {
         const infoPromise = axios.get(url)
@@ -27,6 +24,7 @@ function PokeCard({ url }) {
                 const textFormatted = textFiltered.flavor_text
                     .replace('\f', ' ')
                     .replace('POKéMON', 'POKÉMON')
+                    .replace('\n', ' ')
                 setDescription(textFormatted)
             })
         })
@@ -52,7 +50,7 @@ function PokeCard({ url }) {
             {info ? (
                 <article>
                     <section>
-                        <h1>{info.name.toUpperCase()}</h1>
+                        <h1>{info.name}</h1>
                         <img
                             src={
                                 info.sprites.other['official-artwork']

@@ -22,13 +22,7 @@ function PokePage() {
         <Container>
             {info ? (
                 <>
-                    <button
-                        onClick={() =>
-                            navigate('/?pag=' + Math.floor(info.id / 20))
-                        }
-                    >
-                        voltar
-                    </button>
+                    <button onClick={() => navigate(-1)}>voltar</button>
                     <section className="card">
                         <PokeCard url={url} />
                     </section>

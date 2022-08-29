@@ -2,8 +2,14 @@ import styled from 'styled-components'
 
 const Container = styled.main`
     .card {
-        width: 30%;
+        width: min(30%, 300px);
         margin: auto;
+        @media (max-width: 500px) {
+            width: 60%;
+        }
+        @media (max-width: 330px) {
+            width: 80%;
+        }
     }
 
     .body {

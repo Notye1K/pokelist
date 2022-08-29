@@ -23,6 +23,7 @@ const Card = styled.div`
 
             & > img {
                 width: 100%;
+                height: 215px;
                 background-color: #424242;
                 border-radius: 20px;
                 margin-bottom: 10px;
@@ -30,11 +31,17 @@ const Card = styled.div`
         }
 
         section.description {
-            padding: 10px;
+            height: 110px;
+            padding: 8px;
             background-color: white;
             color: black;
             font-size: 1.1em;
             border-radius: 3%;
+
+            text-align: justify;
+            overflow-y: auto;
+
+            display: flex;
         }
 
         section.stats {
