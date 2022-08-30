@@ -8,6 +8,7 @@ import SearchBar from '../SearchBar'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import pokelogo from '../../assets/pokelogo.png'
+import Google from '../Google'
 
 function MainPage() {
     function useQuery() {
@@ -125,6 +126,7 @@ function MainPage() {
                       ))
                     : 'haha'}
             </ul>
+            <Google />
         </Container>
     )
 }

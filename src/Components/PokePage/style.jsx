@@ -97,6 +97,7 @@ const Container = styled.main`
 
         h2 {
             font-size: 1.3em;
+            margin-bottom: 10px;
         }
 
         .user-comment {
@@ -107,7 +108,7 @@ const Container = styled.main`
 
             textarea {
                 width: 100%;
-                margin-top: 10px;
+                padding: 10px;
             }
             button {
                 margin-left: auto;

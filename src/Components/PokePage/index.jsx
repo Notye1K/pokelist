@@ -8,19 +8,42 @@ import Type from '../Type'
 import Container from './style'
 import pokelogo from '../../assets/pokelogo.png'
 import HomeIcon from '@mui/icons-material/Home'
-import { IconButton, TextField, Tooltip } from '@mui/material'
+import { IconButton, Tooltip } from '@mui/material'
+import Google from '../Google'
+import sendComment from '../../service/sendComment'
+import getComments from '../../service/getComments'
 
 function PokePage() {
     const { pokemon } = useParams()
     const [info, setInfo] = useState()
     const navigate = useNavigate()
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')))
+    const [comment, setComment] = useState('')
+    const [comments, setComments] = useState([])
 
     const url = baseUrl + pokemon
 
     useEffect(() => {
-        const promise = axios.get(url)
-        promise.then((response) => setInfo(response.data))
+        const promisePokeApi = axios.get(url)
+        promisePokeApi.then((response) => {
+            setInfo(response.data)
+
+            const promiseBackApi = getComments(response.data.id)
+            promiseBackApi.then((response) => setComments(response.data))
+        })
     }, [pokemon])
+
+    function handleSend() {
+        const data = {
+            comment,
+            email: user.email,
+            pokemonId: info.id,
+            name: user.givenName,
+            img: user.imageUrl,
+        }
+
+        const promise = sendComment(data)
+    }
 
     return (
         <Container>
@@ -90,10 +113,25 @@ function PokePage() {
                     <section className="comments-area">
                         <h1>Comments</h1>
                         <div className="user-comment">
-                            <h2>Nome user</h2>
-                            <textarea name="userComment" rows="5"></textarea>
-                            <button>enviar</button>
+                            <h2>{user?.givenName || 'Sign-in to comment'}</h2>
+                            <textarea
+                                disabled={user ? false : true}
+                                name="userComment"
+                                rows="5"
+                                value={comment}
+                                placeholder="Type your comment"
+                                onChange={(event) =>
+                                    setComment(event.target.value)
+                                }
+                            ></textarea>
+                            <button
+                                disabled={user && comment ? false : true}
+                                onClick={handleSend}
+                            >
+                                send
+                            </button>
                         </div>
+                        <Google setUser={setUser} user={user} />
                         <div className="comments">
                             <div className="comment">
                                 <h2>Nome da sisaf</h2>
