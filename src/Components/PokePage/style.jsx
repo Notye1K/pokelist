@@ -112,11 +112,13 @@ const Container = styled.main`
             }
             button {
                 margin-left: auto;
+                margin-top: 10px;
+                margin-bottom: 10px;
             }
         }
 
         .comments {
-            margin-top: 10px;
+            margin-top: 20px;
 
             display: flex;
             flex-direction: column;

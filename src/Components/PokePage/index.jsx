@@ -12,6 +12,7 @@ import { IconButton, Tooltip } from '@mui/material'
 import Google from '../Google'
 import sendComment from '../../service/sendComment'
 import getComments from '../../service/getComments'
+import Alert from '../Alert'
 
 function PokePage() {
     const { pokemon } = useParams()
@@ -31,6 +32,7 @@ function PokePage() {
             const promiseBackApi = getComments(response.data.id)
             promiseBackApi.then((response) => setComments(response.data))
         })
+        promisePokeApi.catch((error) => navigate('/'))
     }, [pokemon])
 
     function handleSend() {
@@ -43,6 +45,7 @@ function PokePage() {
         }
 
         const promise = sendComment(data)
+        promise.then(() => setComment(''))
     }
 
     return (
@@ -133,38 +136,17 @@ function PokePage() {
                         </div>
                         <Google setUser={setUser} user={user} />
                         <div className="comments">
-                            <div className="comment">
-                                <h2>Nome da sisaf</h2>
-                                <p>
-                                    Lorem ipsum dolor sit amet consectetur
-                                    adipisicing elit. Ullam praesentium
-                                    veritatis id odit vel voluptatum a quibusdam
-                                    maiores dicta atque.
-                                </p>
-                            </div>
-                            <div className="comment">
-                                <h2>Nome da sisaf</h2>
-                                <p>
-                                    Lorem ipsum dolor sit amet consectetur
-                                    adipisicing elit. Ullam praesentium
-                                    veritatis id odit vel voluptatum a quibusdam
-                                    maiores dicta atque.
-                                </p>
-                            </div>
-                            <div className="comment">
-                                <h2>Nome da sisaf</h2>
-                                <p>
-                                    Lorem ipsum dolor sit amet consectetur
-                                    adipisicing elit. Ullam praesentium
-                                    veritatis id odit vel voluptatum a quibusdam
-                                    maiores dicta atque.
-                                </p>
-                            </div>
+                            {comments?.map((comment) => (
+                                <div key={comment.id} className="comment">
+                                    <h2>{comment.user.name}</h2>
+                                    <p>{comment.comment}</p>
+                                </div>
+                            ))}
                         </div>
                     </section>
                 </>
             ) : (
-                'pokemon non enexiste'
+                '404 error'
             )}
         </Container>
     )

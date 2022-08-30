@@ -38,14 +38,16 @@ function SearchBar() {
                     onChange={(event) => setInput(event.target.value)}
                     onKeyDown={(event) => {
                         if (event.key === 'Enter') {
-                            navigate('/' + input)
+                            navigate('/' + input.toLowerCase())
                         }
                     }}
                     endAdornment={
                         <InputAdornment position="end">
                             <IconButton
                                 aria-label="search pokemon"
-                                onClick={() => navigate('/' + input)}
+                                onClick={() =>
+                                    navigate('/' + input.toLowerCase())
+                                }
                                 onMouseDown={handleMouseDown}
                                 edge="end"
                             >

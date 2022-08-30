@@ -1,2 +1,2 @@
-const backUrl = import.meta.env.VITE_URL_BACK + 'comment'
+const backUrl = import.meta.env.VITE_URL_BACK
 export default backUrl

@@ -92,7 +92,7 @@ function PokeCard({ url }) {
                     </section>
                 </article>
             ) : (
-                'loading'
+                'Loading...'
             )}
         </Card>
     )

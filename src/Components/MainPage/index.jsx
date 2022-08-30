@@ -77,10 +77,13 @@ function MainPage() {
                         )}
                     </div>
                 ) : (
-                    'asdf'
+                    'Loading...'
                 )}
                 <div className="pages">
-                    <ChevronLeftIcon onClick={sliderLeft} />
+                    <ChevronLeftIcon
+                        sx={{ cursor: 'pointer' }}
+                        onClick={sliderLeft}
+                    />
                     <div id="slider">
                         {[...Array(pagination)].map((el, index) => (
                             <button
@@ -124,9 +127,8 @@ function MainPage() {
                               <PokeCard url={poke.url} />
                           </li>
                       ))
-                    : 'haha'}
+                    : 'Loading...'}
             </ul>
-            <Google />
         </Container>
     )
 }

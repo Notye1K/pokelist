@@ -28,17 +28,16 @@ function Google({ setUser, user }) {
         localStorage.removeItem('user')
         setUser('Sign-in to comment')
     }
-    console.log(user)
     return (
         <Container>
-            {user === 'Sign-in to comment' && (
+            {(user === 'Sign-in to comment' || !user) && (
                 <GoogleLogin
                     clientId={import.meta.env.VITE_ID_CLIENT}
                     onSuccess={onSuccess}
                     onFailure={onFailure}
                 />
             )}
-            {user !== 'Sign-in to comment' && (
+            {(user !== 'Sign-in to comment' || user === null) && (
                 <GoogleLogout
                     clientId={import.meta.env.VITE_ID_CLIENT}
                     onLogoutSuccess={onLogoutSuccess}
