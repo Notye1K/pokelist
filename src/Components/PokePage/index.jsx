@@ -140,7 +140,7 @@ function PokePage() {
                             <h2>{user?.givenName || 'Sign-in to comment'}</h2>
                             <textarea
                                 disabled={
-                                    user !== 'Sign-in to comment' ? false : true
+                                    user && user !== 'Sign-in to comment' ? false : true
                                 }
                                 name="userComment"
                                 rows="5"
@@ -152,7 +152,7 @@ function PokePage() {
                             ></textarea>
                             <button
                                 disabled={
-                                    user !== 'Sign-in to comment' && comment
+                                    user && user !== 'Sign-in to comment' && comment
                                         ? false
                                         : true
                                 }
