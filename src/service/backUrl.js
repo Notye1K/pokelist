@@ -1,2 +1,2 @@
-const backUrl = import.meta.env.VITE_URL_BACK
+const backUrl = 'https://back-pokelist.herokuapp.com/pokemons/'
 export default backUrl

@@ -29,12 +29,7 @@ function PokePage() {
         promisePokeApi.then((response) => {
             setInfo(response.data)
 
-            const promiseBackApi = getComments(response.data.id)
-            promiseBackApi.then((response) => setComments(response.data))
-            promiseBackApi.catch(() => {
-                setMessage('It was not possible to load comments')
-                setOpen(true)
-            })
+            renderComments(response.data)
         })
         promisePokeApi.catch(() => {
             navigate('/')
@@ -42,6 +37,17 @@ function PokePage() {
             setOpen(true)
         })
     }, [pokemon])
+
+    function renderComments(info) {
+        const promiseBackApi = getComments(info.id)
+        promiseBackApi.then((response) => {
+            setComments(response.data)
+        })
+        promiseBackApi.catch(() => {
+            setMessage('It was not possible to load comments')
+            setOpen(true)
+        })
+    }
 
     function handleSend() {
         const data = {
@@ -53,7 +59,10 @@ function PokePage() {
         }
 
         const promise = sendComment(data)
-        promise.then(() => setComment(''))
+        promise.then(() => {
+            setComment('')
+            renderComments(info)
+        })
         promise.catch(() => {
             setMessage('It was not possible to send your comment')
             setOpen(true)
