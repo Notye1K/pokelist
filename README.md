@@ -40,7 +40,7 @@ react-google-login;
 5. Add and config a .env file
 6. Run the front-end with
 
- `npm dev`
+ `npm run dev`
 
 This script will open a window in your browser, if don't you can access http://localhost:5173 on your favorite browser (unless it is Internet Explorer. In this case, review your life decisions)
 
