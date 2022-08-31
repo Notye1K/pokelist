@@ -64,6 +64,7 @@ const Container = styled.main`
         flex-wrap: wrap;
         gap: 1em;
         justify-content: center;
+        margin-bottom: 10px;
     }
 
     li {

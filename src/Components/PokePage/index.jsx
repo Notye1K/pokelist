@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import baseUrl from '../../utils/baseUrl'
 import PokeCard from '../PokeCard'
@@ -12,16 +12,16 @@ import { IconButton, Tooltip } from '@mui/material'
 import Google from '../Google'
 import sendComment from '../../service/sendComment'
 import getComments from '../../service/getComments'
-import Alert from '../Alert'
+import AlertContext from '../AlertContext'
 
 function PokePage() {
     const { pokemon } = useParams()
     const [info, setInfo] = useState()
-    const navigate = useNavigate()
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')))
     const [comment, setComment] = useState('')
     const [comments, setComments] = useState([])
-
+    const { setMessage, setOpen } = useContext(AlertContext)
+    const navigate = useNavigate()
     const url = baseUrl + pokemon
 
     useEffect(() => {
@@ -31,8 +31,16 @@ function PokePage() {
 
             const promiseBackApi = getComments(response.data.id)
             promiseBackApi.then((response) => setComments(response.data))
+            promiseBackApi.catch(() => {
+                setMessage('It was not possible to load comments')
+                setOpen(true)
+            })
         })
-        promisePokeApi.catch((error) => navigate('/'))
+        promisePokeApi.catch(() => {
+            navigate('/')
+            setMessage('Pokemon not found')
+            setOpen(true)
+        })
     }, [pokemon])
 
     function handleSend() {
@@ -46,6 +54,10 @@ function PokePage() {
 
         const promise = sendComment(data)
         promise.then(() => setComment(''))
+        promise.catch(() => {
+            setMessage('It was not possible to send your comment')
+            setOpen(true)
+        })
     }
 
     return (

@@ -1,9 +1,12 @@
-import { useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 import { GoogleLogin, GoogleLogout } from 'react-google-login'
 import { gapi } from 'gapi-script'
 import Container from './style'
+import AlertContext from '../AlertContext'
 
 function Google({ setUser, user }) {
+    const { setMessage, setOpen } = useContext(AlertContext)
+
     useEffect(() => {
         function start() {
             gapi.client.init({
@@ -15,16 +18,16 @@ function Google({ setUser, user }) {
     }, [])
 
     const onSuccess = (response) => {
-        console.log('SUCCESS', response)
         const user = JSON.stringify(response.profileObj)
         localStorage.setItem('user', user)
         setUser(response.profileObj)
     }
     const onFailure = (response) => {
         console.log('FAILED', response)
+        setMessage('login has failed')
+        setOpen(true)
     }
     const onLogoutSuccess = () => {
-        console.log('SUCESS LOG OUT')
         localStorage.removeItem('user')
         setUser('Sign-in to comment')
     }

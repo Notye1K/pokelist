@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Card, Shading } from './style'
 import swords from '../../assets/swords.png'
 import heart from '../../assets/heart.png'
@@ -7,29 +7,41 @@ import shield from '../../assets/shield.png'
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip'
 import { styled } from '@mui/material/styles'
 import capitalize from '../../utils/capitalize'
+import AlertContext from '../AlertContext'
 
 function PokeCard({ url }) {
     const [info, setInfo] = useState(null)
     const [description, setDescription] = useState('')
+    const { setMessage, setOpen } = useContext(AlertContext)
+
+    function formatText(textEntries) {
+        const textFiltered = textEntries.find(
+            (entry) => entry.language.name === 'en'
+        )
+        const textFormatted = textFiltered.flavor_text
+            .replace('\f', ' ')
+            .replace('POKéMON', 'POKÉMON')
+            .replace('\n', ' ')
+        return textFormatted
+    }
 
     useEffect(() => {
         const infoPromise = axios.get(url)
         infoPromise.then((response) => {
             setInfo(response.data)
+
             const descriptionPromisse = axios.get(response.data.species.url)
             descriptionPromisse.then((response) => {
                 const textEntries = response.data.flavor_text_entries
-                const textFiltered = textEntries.find(
-                    (entry) => entry.language.name === 'en'
-                )
-                const textFormatted = textFiltered.flavor_text
-                    .replace('\f', ' ')
-                    .replace('POKéMON', 'POKÉMON')
-                    .replace('\n', ' ')
+                const textFormatted = formatText(textEntries)
                 setDescription(textFormatted)
             })
         })
-        infoPromise.catch((error) => console.log(error.response))
+        infoPromise.catch((error) => {
+            console.log(error.response)
+            setMessage('Something is wrong, please try again later')
+            setOpen(true)
+        })
     }, [url])
 
     const CustomTooltip = styled(({ className, ...props }) => (

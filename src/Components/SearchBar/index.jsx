@@ -16,6 +16,11 @@ function SearchBar() {
     const handleMouseDown = (event) => {
         event.preventDefault()
     }
+
+    function handleSearch() {
+        navigate('/' + input.toLowerCase())
+    }
+
     return (
         <>
             <FormControl
@@ -38,16 +43,14 @@ function SearchBar() {
                     onChange={(event) => setInput(event.target.value)}
                     onKeyDown={(event) => {
                         if (event.key === 'Enter') {
-                            navigate('/' + input.toLowerCase())
+                            handleSearch()
                         }
                     }}
                     endAdornment={
                         <InputAdornment position="end">
                             <IconButton
                                 aria-label="search pokemon"
-                                onClick={() =>
-                                    navigate('/' + input.toLowerCase())
-                                }
+                                onClick={handleSearch}
                                 onMouseDown={handleMouseDown}
                                 edge="end"
                             >

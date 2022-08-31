@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { useEffect, useMemo, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import PokeCard from '../PokeCard'
 import Container from './style'
 import baseUrl from '../../utils/baseUrl'
@@ -8,24 +8,32 @@ import SearchBar from '../SearchBar'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import pokelogo from '../../assets/pokelogo.png'
-import Google from '../Google'
+import AlertContext from '../AlertContext'
 
 function MainPage() {
     function useQuery() {
         const { search } = useLocation()
         return useMemo(() => new URLSearchParams(search), [search])
     }
-
     const query = useQuery()
-    const pag = query.get('pag') || 1
+    let pag = parseInt(query.get('pag')) || 1
+
     const [url, setUrl] = useState(
-        pag ? baseUrl + `?offset=${(parseInt(pag) - 1) * 20}&limit=20` : baseUrl
+        Number.isInteger(pag)
+            ? baseUrl + `?offset=${(pag - 1) * 20}&limit=20`
+            : baseUrl
     )
     const [response, setResponse] = useState()
+    const { setMessage, setOpen } = useContext(AlertContext)
+    const navigate = useNavigate()
 
     useEffect(() => {
         const promise = axios.get(url)
         promise.then((response) => setResponse(response.data))
+        promise.catch(() => {
+            setMessage('Something is wrong, please try again later')
+            setOpen(true)
+        })
     }, [url, query])
 
     if (pag) {
@@ -36,8 +44,6 @@ function MainPage() {
     if (response) {
         pagination = Math.ceil(response.count / 20)
     }
-
-    const navigate = useNavigate()
 
     function sliderRight() {
         const slider = document.getElementById('slider')
@@ -58,7 +64,7 @@ function MainPage() {
                             <button
                                 onClick={() => {
                                     setUrl(response.previous)
-                                    navigate('/?pag=' + (parseInt(pag) - 1))
+                                    navigate('/?pag=' + (pag - 1))
                                 }}
                             >
                                 Previous
@@ -69,7 +75,7 @@ function MainPage() {
                             <button
                                 onClick={() => {
                                     setUrl(response.next)
-                                    navigate('/?pag=' + (parseInt(pag) + 1))
+                                    navigate('/?pag=' + (pag + 1))
                                 }}
                             >
                                 Next
@@ -93,9 +99,7 @@ function MainPage() {
                                     navigate('/?pag=' + (index + 1))
                                     setUrl(
                                         baseUrl +
-                                            `?offset=${
-                                                parseInt(index) * 20
-                                            }&limit=20`
+                                            `?offset=${index * 20}&limit=20`
                                     )
                                 }}
                                 style={
