@@ -1,4 +1,4 @@
-# ShareIt
+# PokeList
 
 A pokemon list where you can see the pokemon status and comments about it.
 
